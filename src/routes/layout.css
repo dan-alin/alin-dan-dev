@@ -3,41 +3,70 @@
 @plugin '@tailwindcss/typography';
 
 :root {
-	--yellow-400: #e0af68;
-	--orange-400: #ff9e64;
-	--cyan-400: #7dcfff;
-	--teal-500: #1abc9c;
-	--green-400: #9ece6a;
+	/* TOKYO NIGHT DARK PALETTE */
+	--tnd-lilac: #bb9af7;
+	--tnd-cyan: #2ac3de;
+	--tnd-green: #9ece6a;
+	--tnd-yellow: #e0af68;
+	--tnd-orange: #ff9e64;
+	--tnd-red: #f7768e;
 
-	--aquamarine-400: #73daca;
-	--aquamarine-600: #41a6b5;
+	--tnd-dark: #1a1b26;
+	--tnd-light: #c0caf5;
+	--tnd-gray: #414868;
 
-	--lilac-400: #8d7cd8;
-	--lilac-600: #9d7cd8;
+	/* TOKYO NIGHT LIGHT PALETTE */
+	--tnl-lilac: #5a3e8e;
+	--tnl-cyan: #006c86;
+	--tnl-green: #385f0d;
+	--tnl-yellow: #8f5e15;
+	--tnl-orange: #965027;
+	--tnl-red: #8c4351;
 
-	--gray-100: #c0caf5;
-	--gray-200: #a9b1d6;
-	--gray-900: #16161e;
-	--gray-950: #0c0e14;
+	--tnl-gray: #6c6e75;
+	--tnl-light: #e6e7ed;
+	--tnl-dark: #343b58;
 
-	--blue-400: #7aa2f7;
-	--blue-600: #3d59a1;
-	--blue-700: #394b70;
+	/* Default theme values */
+	--bg: var(--tnd-dark);
+	--fg: var(--tnd-light);
+	--muted: var(--tnd-gray);
+
+	--color-primary: var(--tnd-green);
+	--color-secondary: var(--tnd-cyan);
+	--color-accent: var(--tnd-lilac);
+	--color-muted: var(--tnd-gray);
+
+	/* --bg: var(--tnl-light); */
+	/* --fg: var(--tnl-dark); */
+	/* --muted: var(--tnl-gray); */
+	/**/
+	/* --color-primary: var(--tnl-cyan); */
+	/* --color-secondary: var(--tnl-cyan); */
+	/* --color-accent: var(--tnl-liliac); */
+	/* --color-muted: var(--tnl-gray); */
 }
 
-:root {
-	--color-background: var(--gray-950);
-	--color-foreground: var(--gray-100);
-	--color-highlight: var(--gray-100);
-	--color-foreground-highligted: var(--gray-950);
+[data-theme='tokyonight-dark'] {
+	--bg: var(--tnd-dark);
+	--fg: var(--tnd-light);
+	--muted: var(--tnd-gray);
 
-	--color-muted: var(--gray-900);
+	--color-primary: var(--tnd-green);
+	--color-secondary: var(--tnd-cyan);
+	--color-accent: var(--tnd-lilac);
+	--color-muted: var(--tnd-lime);
+}
 
-	--color-primary: var(--green-400);
-	--color-secondary: var(--orange-400);
-	--color-secondary-hover: var(var(--yellow-400));
-	--color-accent: var(--lilac-400);
-	--color-accent-hover: var(--liliac-600);
+[data-theme='tokyonight-light'] {
+	--bg: var(--tnl-light);
+	--fg: var(--tnl-dark);
+	--muted: var(--tnl-gray);
+
+	--color-primary: var(--tnl-green);
+	--color-secondary: var(--tnl-cyan);
+	--color-accent: var(--tnl-lilac);
+	--color-muted: var(--tnl-lime);
 }
 
 @theme {
@@ -45,42 +74,67 @@
 	--font-doto: 'Doto', monospace;
 
 	/* Backgrounds */
-	--color-background: var(--color-background);
+	--color-background: var(--bg);
 
 	/* Foregrounds */
-	--color-foreground: var(--color-foreground);
-
-	/* Highlights  */
-	--color-highlight: var(--color-highlight);
-	--color-foreground-highlighted: var(--color-foreground-highlighted);
+	--color-foreground: var(--fg);
 
 	/* Muted */
 	--color-muted: var(--color-muted);
 
 	--color-primary: var(--color-primary);
-	--color-secondary: var(--color-econdary);
+	--color-secondary: var(--color-secondary);
 	--color-accent: var(--color-accent);
 }
-@layer utilities {
-	@keyframes blink {
-		0%,
-		50%,
-		100% {
-			opacity: 1;
-		}
-		25%,
-		75% {
-			opacity: 0;
-		}
-	}
 
-	.animate-blink {
-		animation: blink 1s step-start infinite;
-	}
+html {
+	@apply font-roboto;
 }
 
-@utility section {
-	@apply min-h-30 border border-muted bg-background text-foreground;
+body {
+	@apply flex min-h-dvh flex-col items-center justify-center bg-background p-4;
+}
+
+body:before {
+	content: '';
+	transform-style: flat;
+	pointer-events: none;
+	z-index: -1;
+	width: 100vw;
+	height: 100dvh;
+	position: fixed;
+	top: 0px;
+	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px);
+	background-size: 20px 20px;
+	mask: linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
+}
+
+body::after {
+	content: '';
+	pointer-events: none;
+	z-index: -1;
+	width: 100vw;
+	height: 100dvh;
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 1px);
+	background-size: 20px 20px;
+
+	/* Combine mouse-driven glow with base visibility mask */
+	mask-composite: intersect;
+	mask-image:
+		radial-gradient(
+			150px circle at var(--mx, 50%) var(--my, 50%),
+			white 0%,
+			rgba(255, 255, 255, 0.8) 20%,
+			rgba(255, 255, 255, 0.3) 50%,
+			transparent 80%
+		),
+		linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
+
+	transition: mask 0.05s linear;
 }
 
 @utility background-dots {
@@ -99,56 +153,4 @@
 		transparent 1px,
 		transparent 10px
 	);
-}
-
-html {
-	@apply font-roboto;
-}
-
-body {
-	background: var(--color-background);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	min-height: 100dvh;
-}
-
-body:before {
-	content: '';
-	transform-style: flat;
-	pointer-events: none;
-	z-index: -1;
-	width: 100vw;
-	height: 100dvh;
-	position: fixed;
-	top: 0px;
-	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
-	background-size: 20px 20px;
-	mask: linear-gradient(125deg, white 0%, transparent 20%, transparent 50%, white 80%, white 100%);
-}
-
-body::after {
-	content: '';
-	pointer-events: none;
-	z-index: -1;
-	width: 100vw;
-	height: 100dvh;
-	position: fixed;
-	top: 0;
-	left: 0;
-
-	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-	background-size: 20px 20px;
-
-	/* Mouse-driven glow */
-	mask: radial-gradient(
-		180px circle at var(--mx, 50%) var(--my, 50%),
-		white 0%,
-		rgba(255, 255, 255, 0.8) 30%,
-		rgba(255, 255, 255, 0.3) 50%,
-		transparent 70%
-	);
-
-	transition: mask 0.05s linear;
 }

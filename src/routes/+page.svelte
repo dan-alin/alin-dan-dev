@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { ArrowRight } from 'lucide-svelte';
 </script>
 
 <div class="flex flex-col gap-6 overflow-auto">
