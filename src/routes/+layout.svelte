@@ -2,14 +2,8 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { GithubIcon, LinkedinIcon } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	import { initTheme } from '$lib/theme.svelte.js';
 
 	let { children, data } = $props();
-
-	onMount(() => {
-		initTheme();
-	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
