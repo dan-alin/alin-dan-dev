@@ -39,16 +39,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ],
-    "supportedArchitectures": {
-      "os": [
-        "darwin"
-      ],
-      "cpu": [
-        "arm64",
-        "x64"
-      ]
-    }
+    ]
   },
   "dependencies": {
     "lucide-svelte": "^0.562.0"
