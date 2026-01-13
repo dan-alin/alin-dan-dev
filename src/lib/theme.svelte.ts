@@ -19,7 +19,7 @@ export function toggleTheme() {
 
 export function initTheme() {
 	if (typeof localStorage !== 'undefined') {
-		const saved = localStorage.getItem('theme');
+		const saved = localStorage.getItem('theme') || 'rose-pine';
 		setTheme(saved as Theme);
 	}
 }
