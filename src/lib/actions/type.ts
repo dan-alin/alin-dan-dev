@@ -1,6 +1,6 @@
 type TypeOptions = {
 	text: string;
-	delay?: number; // fallback delay per char
+	delay?: number;
 	getDelay?: (char: string, index: number) => number;
 	cursor?: boolean;
 };

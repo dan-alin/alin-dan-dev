@@ -1,90 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 @import 'tailwindcss';
+
 @plugin '@tailwindcss/typography';
 
 :root {
 	/* TOKYO NIGHT DARK PALETTE */
-	--tnd-lilac: #bb9af7;
+	--tnd-purple: #bb9af7;
 	--tnd-cyan: #2ac3de;
 	--tnd-green: #9ece6a;
 	--tnd-yellow: #e0af68;
 	--tnd-orange: #ff9e64;
-	--tnd-red: #f7768e;
-
-	--tnd-dark: #1a1b26;
-	--tnd-light: #c0caf5;
+	--tnd-pink: #f7768e;
+	--tnd-lavender: #c0caf5;
+	--tnd-white: #e0def4;
 	--tnd-gray: #414868;
+	--tnd-black: #1a1b26;
 
-	/* TOKYO NIGHT LIGHT PALETTE */
-	--tnl-lilac: #5a3e8e;
-	--tnl-cyan: #006c86;
-	--tnl-green: #385f0d;
-	--tnl-yellow: #8f5e15;
-	--tnl-orange: #965027;
-	--tnl-red: #8c4351;
-
-	--tnl-gray: #6c6e75;
-	--tnl-light: #e6e7ed;
-	--tnl-dark: #343b58;
-
-	/* Default theme values */
-	--bg: var(--tnd-dark);
-	--fg: var(--tnd-light);
-	--muted: var(--tnd-gray);
-
-	--color-primary: var(--tnd-green);
-	--color-secondary: var(--tnd-cyan);
-	--color-accent: var(--tnd-lilac);
-	--color-muted: var(--tnd-gray);
-
-	/* --bg: var(--tnl-light); */
-	/* --fg: var(--tnl-dark); */
-	/* --muted: var(--tnl-gray); */
-	/**/
-	/* --color-primary: var(--tnl-cyan); */
-	/* --color-secondary: var(--tnl-cyan); */
-	/* --color-accent: var(--tnl-liliac); */
-	/* --color-muted: var(--tnl-gray); */
+	/* ROSE PINE PALETTE */
+	--rp-black: #191724;
+	--rp-white: #e0def4;
+	--rp-pine: #31748f;
+	--rp-gold: #f6c177;
+	--rp-iris: #c4a7e7;
+	--rp-foam: #9ccfd8;
+	--rp-rose: #ebbcba;
+	--rp-muted: #6e6a86;
+	--rp-love: #eb6f92;
 }
 
-[data-theme='tokyonight-dark'] {
-	--bg: var(--tnd-dark);
-	--fg: var(--tnd-light);
-	--muted: var(--tnd-gray);
-
-	--color-primary: var(--tnd-green);
-	--color-secondary: var(--tnd-cyan);
-	--color-accent: var(--tnd-lilac);
-	--color-muted: var(--tnd-lime);
+html,
+:root {
+	--bg: var(--tnd-black);
+	--fg: var(--tnd-lavender);
+	--color-section: var(--tnd-purple);
+	--color-heading: var(--tnd-green);
+	--color-link: var(--tnd-cyan);
+	--color-icons: var(--tnd-cyan);
 }
 
-[data-theme='tokyonight-light'] {
-	--bg: var(--tnl-light);
-	--fg: var(--tnl-dark);
-	--muted: var(--tnl-gray);
+html[data-theme='tokyonight'] {
+	--bg: var(--tnd-black);
+	--fg: var(--tnd-white);
+	--color-section: var(--tnd-purple);
+	--color-heading: var(--tnd-green);
+	--color-link: var(--tnd-cyan);
+	--color-icons: var(--tnd-gray);
+	--color-highlight: var(--tnd-green);
+	--color-txt-hightlight: var(--tnd-black);
+	--color-glow: var(--tnd-green);
+	--color-outlines: var(--tnd-cyan);
+}
 
-	--color-primary: var(--tnl-green);
-	--color-secondary: var(--tnl-cyan);
-	--color-accent: var(--tnl-lilac);
-	--color-muted: var(--tnl-lime);
+html[data-theme='rose-pine'] {
+	--bg: var(--rp-black);
+	--fg: var(--rp-white);
+	--color-command: var(--rp-foam);
+	--color-heading: var(--rp-pine);
+	--color-link: var(--rp-gold);
+	--color-icons: var(--rp-muted);
+	--color-highlight: var(--rp-love);
+	--color-txt-hightlight: var(--rp-black);
+	--color-glow: var(--rp-pine);
+	--color-outlines: var(--rp-foam);
 }
 
 @theme {
 	--font-roboto: 'Roboto Mono', monospace;
 	--font-doto: 'Doto', monospace;
 
-	/* Backgrounds */
 	--color-background: var(--bg);
-
-	/* Foregrounds */
 	--color-foreground: var(--fg);
-
-	/* Muted */
+	--color-command: var(--color-section);
+	--color-heading: var(--color-heading);
+	--color-link: var(--color-link);
+	--color-icons: var(--color-icons);
 	--color-muted: var(--color-muted);
-
-	--color-primary: var(--color-primary);
-	--color-secondary: var(--color-secondary);
-	--color-accent: var(--color-accent);
+	--color-highlight: var(--color-highlight);
+	--color-txt-highlight: var(--color-txt-highlight);
 }
 
 html {
@@ -92,7 +84,7 @@ html {
 }
 
 body {
-	@apply flex min-h-dvh flex-col items-center justify-center bg-background p-4;
+	@apply flex flex-col items-center justify-center bg-background text-foreground;
 }
 
 body:before {
@@ -104,7 +96,11 @@ body:before {
 	height: 100dvh;
 	position: fixed;
 	top: 0px;
-	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0.5px, transparent 1px);
+	background-image: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--fg) 20%, transparent) 0.5px,
+		transparent 1px
+	);
 	background-size: 20px 20px;
 	mask: linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
 }
@@ -119,7 +115,11 @@ body::after {
 	top: 0;
 	left: 0;
 
-	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 1px);
+	background-image: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--color-glow) 90%, transparent) 0.5px,
+		transparent 1px
+	);
 	background-size: 20px 20px;
 
 	/* Combine mouse-driven glow with base visibility mask */
@@ -128,8 +128,8 @@ body::after {
 		radial-gradient(
 			150px circle at var(--mx, 50%) var(--my, 50%),
 			white 0%,
-			rgba(255, 255, 255, 0.8) 20%,
-			rgba(255, 255, 255, 0.3) 50%,
+			color-mix(in srgb, white 80%, transparent) 20%,
+			color-mix(in srgb, white 30%, transparent) 50%,
 			transparent 80%
 		),
 		linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
@@ -139,7 +139,11 @@ body::after {
 
 @utility background-dots {
 	@apply bg-fixed;
-	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+	background-image: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--fg) 10%, transparent) 1px,
+		transparent 1px
+	);
 	background-size: 20px 20px;
 }
 
@@ -147,9 +151,9 @@ body::after {
 	@apply bg-fixed;
 	background-image: repeating-linear-gradient(
 		315deg,
-		rgba(255, 255, 255, 0.06) 0px,
-		rgba(255, 255, 255, 0.06) 1px,
-		rgba(255, 255, 255, 0.02) 2px,
+		color-mix(in srgb, var(--fg) 6%, transparent) 0px,
+		color-mix(in srgb, var(--fg) 6%, transparent) 1px,
+		color-mix(in srgb, var(--fg) 2%, transparent) 2px,
 		transparent 1px,
 		transparent 10px
 	);

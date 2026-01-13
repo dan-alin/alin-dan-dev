@@ -1,10 +1,10 @@
 type ScrambleOptions = {
 	text: string;
-	duration?: number; // total animation time
-	delay?: number; // optional delay before starting
-	characters?: string; // characters used for scrambling
-	startChar?: string; // placeholder character (default 'X')
-	startCharCount?: number; // total number of starting placeholders
+	duration?: number;
+	delay?: number;
+	characters?: string;
+	startChar?: string;
+	startCharCount?: number;
 };
 
 const DEFAULT_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -20,7 +20,7 @@ export function scramble(node: HTMLElement, options: ScrambleOptions) {
 	} = options;
 
 	let timeout: number | undefined;
-	let interval: number | undefined;
+	let interval: NodeJS.Timeout | undefined;
 
 	function stop() {
 		if (timeout) clearTimeout(timeout);
