@@ -26,6 +26,11 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Alin Dan - Frontend Engineer</title>
+	<meta name="description" content="Alin Dan - Frontend Engineer based in Rome, Italy" />
+</svelte:head>
+
 <div class="relative flex gap-2">
 	<p
 		class="absolute bottom-0 -left-1 origin-bottom-left -rotate-90 font-roboto text-sm text-command"
