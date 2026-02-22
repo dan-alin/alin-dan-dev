@@ -15,27 +15,20 @@
 	--tnd-white: #e0def4;
 	--tnd-gray: #414868;
 	--tnd-black: #1a1b26;
-
-	/* ROSE PINE PALETTE */
-	--rp-black: #191724;
-	--rp-white: #e0def4;
-	--rp-pine: #31748f;
-	--rp-gold: #f6c177;
-	--rp-iris: #c4a7e7;
-	--rp-foam: #9ccfd8;
-	--rp-rose: #ebbcba;
-	--rp-muted: #6e6a86;
-	--rp-love: #eb6f92;
 }
 
 html,
 :root {
 	--bg: var(--tnd-black);
-	--fg: var(--tnd-lavender);
+	--fg: var(--tnd-white);
 	--color-section: var(--tnd-purple);
 	--color-heading: var(--tnd-green);
 	--color-link: var(--tnd-cyan);
-	--color-icons: var(--tnd-cyan);
+	--color-icons: var(--tnd-gray);
+	--color-highlight: var(--tnd-green);
+	--color-txt-hightlight: var(--tnd-black);
+	--color-glow: var(--tnd-green);
+	--color-outlines: var(--tnd-cyan);
 }
 
 html[data-theme='tokyonight'] {
@@ -49,19 +42,6 @@ html[data-theme='tokyonight'] {
 	--color-txt-hightlight: var(--tnd-black);
 	--color-glow: var(--tnd-green);
 	--color-outlines: var(--tnd-cyan);
-}
-
-html[data-theme='rose-pine'] {
-	--bg: var(--rp-black);
-	--fg: var(--rp-white);
-	--color-command: var(--rp-foam);
-	--color-heading: var(--rp-pine);
-	--color-link: var(--rp-gold);
-	--color-icons: var(--rp-muted);
-	--color-highlight: var(--rp-love);
-	--color-txt-hightlight: var(--rp-black);
-	--color-glow: var(--rp-pine);
-	--color-outlines: var(--rp-foam);
 }
 
 @theme {

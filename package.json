@@ -1,7 +1,7 @@
 {
   "name": "alin-dan-dev",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.6",
   "type": "module",
   "scripts": {
     "dev": "vite dev --host",
@@ -39,16 +39,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ],
-    "supportedArchitectures": {
-      "os": [
-        "darwin"
-      ],
-      "cpu": [
-        "arm64",
-        "x64"
-      ]
-    }
+    ]
   },
   "dependencies": {
     "lucide-svelte": "^0.562.0"

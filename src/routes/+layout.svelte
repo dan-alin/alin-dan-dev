@@ -2,14 +2,8 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { GithubIcon, LinkedinIcon } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	import { initTheme } from '$lib/theme.svelte.js';
 
 	let { children, data } = $props();
-
-	onMount(() => {
-		initTheme();
-	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -24,12 +18,12 @@
 
 <footer class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-end gap-4 px-4 text-xs">
 	<div class="flex justify-center gap-2">
-		<a href={data.githubUrl} target="_blank" rel="external">
+		<a href={data.githubUrl} target="_blank" rel="external" aria-label="github profile">
 			<GithubIcon
 				class="size-5 text-foreground/20 transition-transform duration-300 hover:-translate-y-0.5   hover:text-foreground/80"
 			/>
 		</a>
-		<a href={data.linkedinUrl} target="_blank" rel="external">
+		<a href={data.linkedinUrl} target="_blank" rel="external" aria-label="linkedin profile">
 			<LinkedinIcon
 				class="size-5 text-foreground/20 transition-transform duration-300 hover:-translate-y-0.5   hover:text-foreground/80"
 			/>
