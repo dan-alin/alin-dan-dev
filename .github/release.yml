@@ -1,15 +1,15 @@
 {
   "categories": [
     {
-      "title": "## 🚀 Features",
+      "title": "## Features",
       "labels": ["feat"]
     },
     {
-      "title": "## 🐛 Bug Fixes",
+      "title": "## Bug Fixes",
       "labels": ["fix"]
     },
     {
-      "title": "## 🧰 Maintenance",
+      "title": "## Maintenance",
       "labels": ["chore", "docs", "style", "refactor", "perf", "test"]
     }
   ],
