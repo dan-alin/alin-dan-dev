@@ -1,0 +1,25 @@
+{
+  "categories": [
+    {
+      "title": "🚀 Features",
+      "labels": ["feat"]
+    },
+    {
+      "title": "🐛 Bug Fixes",
+      "labels": ["fix"]
+    },
+    {
+      "title": "🧰 Maintenance",
+      "labels": ["chore", "docs", "style", "refactor", "perf", "test"]
+    }
+  ],
+  "template": "# ${TITLE}\n\n${CHANGELOG}\n\n**Full Changelog**: ${DIFF}",
+  "pr_template": "- ${TITLE} (${AUTHOR})",
+  "empty_template": "- No notable changes",
+  "label_extractor": [
+    {
+      "pattern": "^(feat|fix|chore|docs|style|refactor|perf|test)(\\(.+\\))?: .+$",
+      "target": "$1"
+    }
+  ]
+}
