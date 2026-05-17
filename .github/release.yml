@@ -1,20 +1,20 @@
 {
   "categories": [
     {
-      "title": "🚀 Features",
+      "title": "## 🚀 Features",
       "labels": ["feat"]
     },
     {
-      "title": "🐛 Bug Fixes",
+      "title": "## 🐛 Bug Fixes",
       "labels": ["fix"]
     },
     {
-      "title": "🧰 Maintenance",
+      "title": "## 🧰 Maintenance",
       "labels": ["chore", "docs", "style", "refactor", "perf", "test"]
     }
   ],
-  "template": "# ${TITLE}\n\n${CHANGELOG}\n\n**Full Changelog**: ${DIFF}",
-  "pr_template": "- ${TITLE} (${AUTHOR})",
+  "template": "# #{{TITLE}}\n\n#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>\n\n**Full Changelog**: #{{DIFF}}",
+  "pr_template": "- #{{TITLE}} (#{{AUTHOR}})",
   "empty_template": "- No notable changes",
   "label_extractor": [
     {

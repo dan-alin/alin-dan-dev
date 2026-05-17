@@ -55,6 +55,7 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v5
         with:
           configuration: ".github/release.yml"
+          mode: "COMMIT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
