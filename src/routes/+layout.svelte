@@ -1,4 +1,6 @@
 <script lang="ts">
+	import '@fontsource-variable/doto';
+	import '@fontsource-variable/roboto-mono';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Github from '$lib/components/icons/Github.svelte';

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 @import 'tailwindcss';
 
 @plugin '@tailwindcss/typography';
@@ -45,8 +44,8 @@ html[data-theme='tokyonight'] {
 }
 
 @theme {
-	--font-roboto: 'Roboto Mono', monospace;
-	--font-doto: 'Doto', monospace;
+	--font-roboto: 'Roboto Mono Variable', monospace;
+	--font-doto: 'Doto Variable', monospace;
 
 	--color-background: var(--bg);
 	--color-foreground: var(--fg);
