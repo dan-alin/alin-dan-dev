@@ -15,7 +15,7 @@
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
-<!-- <svelte:head><link rel="icon" href={favicon} /></svelte:head> -->
+ <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <div
 	class="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 items-center justify-center p-4 px-6 text-foreground selection:bg-highlight selection:text-txt-highlight! lg:grid-cols-2 lg:justify-start xl:px-0 2xl:max-w-7xl"

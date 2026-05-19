@@ -23,8 +23,8 @@
 </script>
 
 <svelte:head>
-	<title>Alin Dan - Frontend Engineer</title>
-	<meta name="description" content="Alin Dan - Frontend Engineer based in Rome, Italy" />
+	<title>Alin Dan</title>
+	<meta name="description" content="The personal portfolio and interactive terminal of Alin Dan. Explore projects, skills, and experiments in software development." />
 </svelte:head>
 
 <div class="relative flex gap-2">
