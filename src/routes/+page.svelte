@@ -12,7 +12,6 @@
 		location: 'Rome, Italy',
 		build: `${__APP_VERSION__}`
 	};
-
 	onMount(() => {
 		const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
@@ -40,7 +39,7 @@
 	<div class="flex flex-col gap-1 font-roboto">
 		<h1 class="text-heading">{profile.name}</h1>
 		<div class="flex gap-2">
-			<ul class="flex h-20 flex-col justify-between gap-2">
+			<ul class="flex flex-col gap-2">
 				<li class="flex h-5 max-w-full flex-row items-center gap-2 text-sm">
 					<SquareTerminal class="size-4 text-icons" />
 

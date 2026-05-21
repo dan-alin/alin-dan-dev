@@ -43,6 +43,19 @@ html[data-theme='tokyonight'] {
 	--color-outlines: var(--tnd-cyan);
 }
 
+html[data-theme='tokyonight-light'] {
+	--bg: #d5d6db;
+	--fg: #343b58;
+	--color-section: #5a4a78;
+	--color-heading: #33635c;
+	--color-link: #0f4b6e;
+	--color-icons: #8c90a8;
+	--color-highlight: #b2552b;
+	--color-txt-highlight: #d5d6db;
+	--color-glow: #33635c;
+	--color-outlines: #0f4b6e;
+}
+
 @theme {
 	--font-roboto: 'Roboto Mono Variable', monospace;
 	--font-doto: 'Doto Variable', monospace;
@@ -56,6 +69,7 @@ html[data-theme='tokyonight'] {
 	--color-muted: var(--color-muted);
 	--color-highlight: var(--color-highlight);
 	--color-txt-highlight: var(--color-txt-highlight);
+	--color-outlines: var(--color-outlines);
 }
 
 html {
@@ -75,13 +89,35 @@ body:before {
 	height: 100dvh;
 	position: fixed;
 	top: 0px;
+	mask: linear-gradient(-150deg, var(--fg) 0%, transparent 30%, transparent 70%, var(--fg) 80%);
+}
+
+html[data-pattern='dots'] body:before {
 	background-image: radial-gradient(
 		circle,
 		color-mix(in srgb, var(--fg) 20%, transparent) 0.5px,
 		transparent 1px
 	);
 	background-size: 20px 20px;
-	mask: linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
+}
+
+html[data-pattern='lines'] body:before {
+	background-image: repeating-linear-gradient(
+		315deg,
+		color-mix(in srgb, var(--fg) 6%, transparent) 0px,
+		color-mix(in srgb, var(--fg) 6%, transparent) 1px,
+		color-mix(in srgb, var(--fg) 2%, transparent) 2px,
+		transparent 1px,
+		transparent 10px
+	);
+	background-size: auto;
+}
+
+html[data-pattern='grid'] body:before {
+	background-image:
+		linear-gradient(color-mix(in srgb, var(--fg) 10%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in srgb, var(--fg) 10%, transparent) 1px, transparent 1px);
+	background-size: 20px 20px;
 }
 
 body::after {
@@ -94,26 +130,47 @@ body::after {
 	top: 0;
 	left: 0;
 
+	/* Combine mouse-driven glow with base visibility mask */
+	mask-composite: intersect;
+	mask-image:
+		radial-gradient(
+			150px circle at var(--mx, 50%) var(--my, 50%),
+			var(--fg) 0%,
+			color-mix(in srgb, var(--fg) 80%, transparent) 20%,
+			color-mix(in srgb, var(--fg) 30%, transparent) 50%,
+			transparent 80%
+		),
+		linear-gradient(-150deg, var(--fg) 0%, transparent 30%, transparent 70%, var(--fg) 80%);
+
+	transition: mask 0.05s linear;
+}
+
+html[data-pattern='dots'] body::after {
 	background-image: radial-gradient(
 		circle,
 		color-mix(in srgb, var(--color-glow) 90%, transparent) 0.5px,
 		transparent 1px
 	);
 	background-size: 20px 20px;
+}
 
-	/* Combine mouse-driven glow with base visibility mask */
-	mask-composite: intersect;
-	mask-image:
-		radial-gradient(
-			150px circle at var(--mx, 50%) var(--my, 50%),
-			white 0%,
-			color-mix(in srgb, white 80%, transparent) 20%,
-			color-mix(in srgb, white 30%, transparent) 50%,
-			transparent 80%
-		),
-		linear-gradient(-150deg, white 0%, transparent 30%, transparent 70%, white 80%);
+html[data-pattern='lines'] body::after {
+	background-image: repeating-linear-gradient(
+		315deg,
+		color-mix(in srgb, var(--color-glow) 30%, transparent) 0px,
+		color-mix(in srgb, var(--color-glow) 30%, transparent) 1px,
+		color-mix(in srgb, var(--color-glow) 10%, transparent) 2px,
+		transparent 1px,
+		transparent 10px
+	);
+	background-size: auto;
+}
 
-	transition: mask 0.05s linear;
+html[data-pattern='grid'] body::after {
+	background-image:
+		linear-gradient(color-mix(in srgb, var(--color-glow) 40%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in srgb, var(--color-glow) 40%, transparent) 1px, transparent 1px);
+	background-size: 20px 20px;
 }
 
 @utility background-dots {
@@ -148,6 +205,6 @@ body::after {
 	@apply rounded-xs ring-1 ring-highlight ring-offset-2 ring-offset-background outline-none;
 }
 
-:focus-visible {
+:focus-visible:not(.no-focus-ring) {
 	@apply focus-highlight;
 }

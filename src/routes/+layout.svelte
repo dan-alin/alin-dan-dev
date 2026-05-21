@@ -8,11 +8,34 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+	import CommandDialog from '$lib/components/CommandDialog.svelte';
+	import { onMount } from 'svelte';
 
 	let { children, data } = $props();
+	let isCommandDialogOpen = $state(false);
 
 	injectSpeedInsights();
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
+
+	onMount(() => {
+		const handleKeydown = (e: KeyboardEvent) => {
+			if (e.key === ':' && !isCommandDialogOpen) {
+				const target = e.target as HTMLElement;
+				if (
+					target.tagName === 'INPUT' ||
+					target.tagName === 'TEXTAREA' ||
+					target.isContentEditable
+				) {
+					return;
+				}
+				e.preventDefault();
+				isCommandDialogOpen = true;
+			}
+		};
+
+		window.addEventListener('keydown', handleKeydown);
+		return () => window.removeEventListener('keydown', handleKeydown);
+	});
 </script>
 
  <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -47,3 +70,5 @@
 		</a>
 	</div>
 </footer>
+
+<CommandDialog bind:isOpen={isCommandDialogOpen} />
