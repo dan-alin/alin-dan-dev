@@ -10,10 +10,15 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import CommandDialog from '$lib/components/CommandDialog.svelte';
 	import { onMount } from 'svelte';
+	import { Sun, Moon, LayoutGrid } from '@lucide/svelte';
+	import { browser } from '$app/environment';
 
 	let { children, data } = $props();
 	let isCommandDialogOpen = $state(false);
 	let modifierKey = $state('⌘');
+
+	let currentTheme = $state('tokyonight');
+	let currentPattern = $state('dots');
 
 	injectSpeedInsights();
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
@@ -25,12 +30,12 @@
 
 		const handleKeydown = (e: KeyboardEvent) => {
 			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+				if (window.innerWidth < 640) return;
+
 				const target = e.target as HTMLElement;
 				if (
 					!isCommandDialogOpen &&
-					(target.tagName === 'INPUT' ||
-						target.tagName === 'TEXTAREA' ||
-						target.isContentEditable)
+					(target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
 				) {
 					return;
 				}
@@ -40,11 +45,50 @@
 		};
 
 		window.addEventListener('keydown', handleKeydown);
+
+		if (browser) {
+			currentTheme = localStorage.getItem('theme') || 'tokyonight';
+			currentPattern = localStorage.getItem('pattern') || 'dots';
+		}
+
 		return () => window.removeEventListener('keydown', handleKeydown);
 	});
+
+	function toggleTheme() {
+		currentTheme = currentTheme === 'tokyonight' ? 'tokyonight-light' : 'tokyonight';
+		if (browser) {
+			localStorage.setItem('theme', currentTheme);
+			document.documentElement.setAttribute('data-theme', currentTheme);
+		}
+	}
+
+	function togglePattern() {
+		const patterns = ['dots', 'lines', 'grid'];
+		const nextIndex = (patterns.indexOf(currentPattern) + 1) % patterns.length;
+		currentPattern = patterns[nextIndex];
+		if (browser) {
+			localStorage.setItem('pattern', currentPattern);
+			document.documentElement.setAttribute('data-pattern', currentPattern);
+		}
+	}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+
+<header
+	class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4 sm:hidden"
+>
+	<button onclick={toggleTheme} aria-label="toggle theme" class="social-icon">
+		{#if currentTheme === 'tokyonight'}
+			<Moon class="size-full" />
+		{:else}
+			<Sun class="size-full" />
+		{/if}
+	</button>
+	<button onclick={togglePattern} aria-label="toggle pattern" class="social-icon">
+		<LayoutGrid class="size-full" />
+	</button>
+</header>
 
 <div
 	class="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 items-center justify-center p-4 px-6 text-foreground selection:bg-highlight selection:text-txt-highlight! lg:grid-cols-2 lg:justify-start xl:px-0 2xl:max-w-7xl"
@@ -55,13 +99,13 @@
 </div>
 
 <footer
-	class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-between gap-4 px-4 text-xs"
+	class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-center gap-4 px-4 text-xs sm:justify-between"
 >
 	<div class="flex justify-start gap-1">
 		<button
 			onclick={() => (isCommandDialogOpen = true)}
 			aria-label="open settings"
-			class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-icons"
+			class="hidden cursor-pointer flex-row items-center justify-center border-none bg-background text-icons sm:flex"
 		>
 			<kbd class="rounded-sm border border-current px-1 font-roboto text-sm font-bold shadow-sm"
 				>{modifierKey} K</kbd
