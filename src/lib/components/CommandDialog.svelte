@@ -67,22 +67,39 @@
 	function handleKeydown(e: KeyboardEvent) {
 		if (!isOpen) return;
 
-		if (e.key.toLowerCase() === 'w') {
+		const active = document.activeElement as HTMLElement;
+		const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+
+		// Allow normal typing if focused on an input
+		if (isInput && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+			return;
+		}
+
+		if (!e.metaKey && !e.ctrlKey && e.key.toLowerCase() === 'w') {
 			e.preventDefault();
 			saveAndClose();
 			return;
 		}
 
-		if (e.key === 'Escape' || e.key.toLowerCase() === 'q') {
+		if (!e.metaKey && !e.ctrlKey && (e.key === 'Escape' || e.key.toLowerCase() === 'q')) {
 			e.preventDefault();
 			handleClose();
 			return;
 		}
 
-		if (e.key.startsWith('Arrow')) {
-			const active = document.activeElement as HTMLElement;
-			if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
-				if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') return;
+		const lowerKey = e.key.toLowerCase();
+		const code = e.code || '';
+
+		let isArrowRight = e.key === 'ArrowRight' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'l' || code === 'KeyL'));
+		let isArrowLeft = e.key === 'ArrowLeft' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'h' || code === 'KeyH'));
+		let isArrowDown = e.key === 'ArrowDown' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'j' || code === 'KeyJ'));
+		let isArrowUp = e.key === 'ArrowUp' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'k' || code === 'KeyK'));
+
+		let isNav = isArrowRight || isArrowLeft || isArrowDown || isArrowUp;
+
+		if (isNav) {
+			if (isInput) {
+				if (isArrowLeft || isArrowRight) return;
 			}
 
 			// Group buttons by their container rows
@@ -103,16 +120,16 @@
 
 			let c = rows[r].indexOf(active);
 
-			if (e.key === 'ArrowRight') {
+			if (isArrowRight) {
 				rows[r][(c + 1) % rows[r].length].focus();
-			} else if (e.key === 'ArrowLeft') {
+			} else if (isArrowLeft) {
 				rows[r][(c - 1 + rows[r].length) % rows[r].length].focus();
-			} else if (e.key === 'ArrowDown') {
+			} else if (isArrowDown) {
 				let nextRow = (r + 1) % rows.length;
 				let target =
 					rows[nextRow].find((btn) => btn.classList.contains('text-highlight')) || rows[nextRow][0];
 				target.focus();
-			} else if (e.key === 'ArrowUp') {
+			} else if (isArrowUp) {
 				let prevRow = (r - 1 + rows.length) % rows.length;
 				let target =
 					rows[prevRow].find((btn) => btn.classList.contains('text-highlight')) || rows[prevRow][0];
