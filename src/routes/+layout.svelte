@@ -13,23 +13,29 @@
 
 	let { children, data } = $props();
 	let isCommandDialogOpen = $state(false);
+	let modifierKey = $state('⌘');
 
 	injectSpeedInsights();
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	onMount(() => {
+		if (navigator.userAgent.indexOf('Win') !== -1 || navigator.userAgent.indexOf('Linux') !== -1) {
+			modifierKey = 'Ctrl';
+		}
+
 		const handleKeydown = (e: KeyboardEvent) => {
-			if (e.key === ':' && !isCommandDialogOpen) {
+			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
 				const target = e.target as HTMLElement;
 				if (
-					target.tagName === 'INPUT' ||
-					target.tagName === 'TEXTAREA' ||
-					target.isContentEditable
+					!isCommandDialogOpen &&
+					(target.tagName === 'INPUT' ||
+						target.tagName === 'TEXTAREA' ||
+						target.isContentEditable)
 				) {
 					return;
 				}
 				e.preventDefault();
-				isCommandDialogOpen = true;
+				isCommandDialogOpen = !isCommandDialogOpen;
 			}
 		};
 
@@ -38,7 +44,7 @@
 	});
 </script>
 
- <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <div
 	class="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 items-center justify-center p-4 px-6 text-foreground selection:bg-highlight selection:text-txt-highlight! lg:grid-cols-2 lg:justify-start xl:px-0 2xl:max-w-7xl"
@@ -48,8 +54,21 @@
 	</main>
 </div>
 
-<footer class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-end gap-4 px-4 text-xs">
-	<div class="flex justify-center gap-1">
+<footer
+	class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-between gap-4 px-4 text-xs"
+>
+	<div class="flex justify-start gap-1">
+		<button
+			onclick={() => (isCommandDialogOpen = true)}
+			aria-label="open settings"
+			class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-icons"
+		>
+			<kbd class="rounded-sm border border-current px-1 font-roboto text-sm font-bold shadow-sm"
+				>{modifierKey} K</kbd
+			>
+		</button>
+	</div>
+	<div class="flex justify-end gap-1">
 		<a
 			href={data.githubUrl}
 			target="_blank"

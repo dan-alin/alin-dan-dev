@@ -169,7 +169,11 @@ html[data-pattern='lines'] body::after {
 html[data-pattern='grid'] body::after {
 	background-image:
 		linear-gradient(color-mix(in srgb, var(--color-glow) 40%, transparent) 1px, transparent 1px),
-		linear-gradient(90deg, color-mix(in srgb, var(--color-glow) 40%, transparent) 1px, transparent 1px);
+		linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--color-glow) 40%, transparent) 1px,
+			transparent 1px
+		);
 	background-size: 20px 20px;
 }
 
@@ -196,7 +200,7 @@ html[data-pattern='grid'] body::after {
 }
 
 @utility social-icon {
-	@apply size-6 p-1 opacity-20 transition-all duration-300 outline-none;
+	@apply size-6 cursor-pointer p-1 opacity-20 transition-all duration-300 outline-none;
 	@apply hover:-translate-y-0.5 hover:opacity-100;
 	@apply focus:-translate-y-0.5 focus:opacity-100;
 }
