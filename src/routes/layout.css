@@ -9,11 +9,21 @@
 	--tnd-green: #9ece6a;
 	--tnd-yellow: #e0af68;
 	--tnd-orange: #ff9e64;
-	--tnd-pink: #f7768e;
+	--tnd-red: #f7768e;
 	--tnd-lavender: #c0caf5;
 	--tnd-white: #e0def4;
 	--tnd-gray: #414868;
 	--tnd-black: #1a1b26;
+
+	/* TOKYO NIGHT LIGHT PALETTE */
+	--tnl-purple: #5a3e8e;
+	--tnl-cyan: #2ac3de;
+	--tnl-green: #385f0d;
+	--tnl-orange: #ff9e64;
+	--tnl-red: #f7768e;
+	--tnl-white: #e0def4;
+	--tnl-gray: #565f89;
+	--tnl-black: #24283b;
 }
 
 html,
@@ -44,16 +54,16 @@ html[data-theme='tokyonight'] {
 }
 
 html[data-theme='tokyonight-light'] {
-	--bg: #d5d6db;
-	--fg: #343b58;
-	--color-section: #5a4a78;
-	--color-heading: #33635c;
-	--color-link: #0f4b6e;
-	--color-icons: #8c90a8;
-	--color-highlight: #b2552b;
-	--color-txt-highlight: #d5d6db;
-	--color-glow: #33635c;
-	--color-outlines: #0f4b6e;
+	--bg: var(--tnl-white);
+	--fg: var(--tnl-black);
+	--color-section: var(--tnl-red);
+	--color-heading: var(--tnl-cyan);
+	--color-link: var(--tnl-purple);
+	--color-icons: var(--tnl-gray);
+	--color-highlight: var(--tnl-cyan);
+	--color-txt-highlight: var(--tnl-white);
+	--color-glow: var(--tnl-green);
+	--color-outlines: var(--tnl-orange);
 }
 
 @theme {
