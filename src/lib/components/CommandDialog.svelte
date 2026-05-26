@@ -8,6 +8,7 @@
 	let theme = $state(originalTheme);
 	let pattern = $state(originalPattern);
 	let saved = false;
+	let isInitializing = false;
 
 	$effect(() => {
 		if (browser) {
@@ -44,6 +45,7 @@
 
 	$effect(() => {
 		if (isOpen) {
+			isInitializing = true;
 			saved = false;
 			if (browser) {
 				originalTheme = localStorage.getItem('theme') || 'tokyonight';
@@ -58,6 +60,10 @@
 					(dialog?.querySelector(`button[data-id="${originalPattern}"]`) as HTMLElement) ||
 					(dialog?.querySelector('button') as HTMLElement);
 				activeBtn?.focus();
+
+				setTimeout(() => {
+					isInitializing = false;
+				}, 10);
 			}, 10);
 		} else {
 			dialog?.close();
@@ -166,7 +172,7 @@
 						class:text-highlight={pattern === 'dots'}
 						class:text-foreground={pattern !== 'dots'}
 						onfocus={() => {
-							pattern = 'dots';
+							if (!isInitializing) pattern = 'dots';
 						}}
 					>
 						<span class={pattern === 'dots' ? '' : 'invisible'}>[</span>dots<span
@@ -179,7 +185,7 @@
 						class:text-highlight={pattern === 'lines'}
 						class:text-foreground={pattern !== 'lines'}
 						onfocus={() => {
-							pattern = 'lines';
+							if (!isInitializing) pattern = 'lines';
 						}}
 					>
 						<span class={pattern === 'lines' ? '' : 'invisible'}>[</span>lines<span
@@ -192,7 +198,7 @@
 						class:text-highlight={pattern === 'grid'}
 						class:text-foreground={pattern !== 'grid'}
 						onfocus={() => {
-							pattern = 'grid';
+							if (!isInitializing) pattern = 'grid';
 						}}
 					>
 						<span class={pattern === 'grid' ? '' : 'invisible'}>[</span>grid<span
@@ -214,10 +220,10 @@
 						class:text-highlight={theme === 'tokyonight'}
 						class:text-foreground={theme !== 'tokyonight'}
 						onfocus={() => {
-							theme = 'tokyonight';
+							if (!isInitializing) theme = 'tokyonight';
 						}}
 					>
-						<span class={theme === 'tokyonight' ? '' : 'invisible'}>[</span>dark<span
+						<span class={theme === 'tokyonight' ? '' : 'invisible'}>[</span>tokyonight<span
 							class={theme === 'tokyonight' ? '' : 'invisible'}>]</span
 						>
 					</button>
@@ -227,7 +233,7 @@
 						class:text-highlight={theme === 'tokyonight-light'}
 						class:text-foreground={theme !== 'tokyonight-light'}
 						onfocus={() => {
-							theme = 'tokyonight-light';
+							if (!isInitializing) theme = 'tokyonight-light';
 						}}
 					>
 						<span class={theme === 'tokyonight-light' ? '' : 'invisible'}>[</span>light<span
