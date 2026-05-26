@@ -82,26 +82,18 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 {#if data.isMobile}
-<header class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4">
-	<button
-		onclick={toggleTheme}
-		aria-label="toggle theme"
-		class="social-icon"
-	>
-		{#if currentTheme === 'tokyonight'}
-			<Moon class="size-full" />
-		{:else}
-			<Sun class="size-full" />
-		{/if}
-	</button>
-	<button
-		onclick={togglePattern}
-		aria-label="toggle pattern"
-		class="social-icon"
-	>
-		<LayoutGrid class="size-full" />
-	</button>
-</header>
+	<header class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4">
+		<button onclick={toggleTheme} aria-label="toggle theme" class="social-icon">
+			{#if currentTheme === 'tokyonight'}
+				<Moon class="size-full" />
+			{:else}
+				<Sun class="size-full" />
+			{/if}
+		</button>
+		<button onclick={togglePattern} aria-label="toggle pattern" class="social-icon">
+			<LayoutGrid class="size-full" />
+		</button>
+	</header>
 {/if}
 
 <div
@@ -117,15 +109,13 @@
 >
 	<div class="flex justify-start gap-1">
 		{#if !data.isMobile}
-		<button
-			onclick={() => (isCommandDialogOpen = true)}
-			aria-label="open settings"
-			class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-icons"
-		>
-			<kbd class="rounded-sm border border-current px-1 font-roboto text-sm font-bold shadow-sm"
-				>{modifierKey} K</kbd
+			<button
+				onclick={() => (isCommandDialogOpen = true)}
+				aria-label="open settings"
+				class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-command/80"
 			>
-		</button>
+				<kbd class="rounded-sm border border-current px-1 font-roboto text-xs">{modifierKey} K</kbd>
+			</button>
 		{/if}
 	</div>
 	<div class="flex justify-end gap-1">

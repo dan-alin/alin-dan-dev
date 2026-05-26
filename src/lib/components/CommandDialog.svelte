@@ -96,10 +96,14 @@
 		const lowerKey = e.key.toLowerCase();
 		const code = e.code || '';
 
-		let isArrowRight = e.key === 'ArrowRight' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'l' || code === 'KeyL'));
-		let isArrowLeft = e.key === 'ArrowLeft' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'h' || code === 'KeyH'));
-		let isArrowDown = e.key === 'ArrowDown' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'j' || code === 'KeyJ'));
-		let isArrowUp = e.key === 'ArrowUp' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'k' || code === 'KeyK'));
+		let isArrowRight =
+			e.key === 'ArrowRight' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'l' || code === 'KeyL'));
+		let isArrowLeft =
+			e.key === 'ArrowLeft' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'h' || code === 'KeyH'));
+		let isArrowDown =
+			e.key === 'ArrowDown' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'j' || code === 'KeyJ'));
+		let isArrowUp =
+			e.key === 'ArrowUp' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'k' || code === 'KeyK'));
 
 		let isNav = isArrowRight || isArrowLeft || isArrowDown || isArrowUp;
 
@@ -155,127 +159,66 @@
 	class="fixed top-1/2 left-1/2 m-0 h-100 w-150 max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-outlines bg-background p-6 font-roboto text-foreground shadow-none ring-0 transition-all duration-300 outline-none backdrop:bg-transparent focus:outline-none"
 >
 	<div class="flex h-full flex-col gap-4">
-		<div class="flex items-center gap-2 text-sm font-bold text-command">
-			<span class="text-icons">~</span> /settings $
+		<div class="mx-auto flex items-center gap-2 text-sm font-bold text-command uppercase">
+			settings
 		</div>
 
 		<div class="mt-2 flex flex-col gap-2">
 			<div class="group flex items-center gap-4 text-sm">
 				<span
-					class="hidden w-20 text-icons transition-colors group-focus-within:text-foreground sm:block"
+					class="hidden w-20 text-foreground/60 transition-colors group-focus-within:text-foreground sm:block"
 					>pattern</span
 				>
 				<div class="keyboard-row flex gap-4">
-					<button
-						data-id="dots"
-						class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-						class:text-highlight={pattern === 'dots'}
-						class:text-foreground={pattern !== 'dots'}
-						onfocus={() => {
-							if (!isInitializing) pattern = 'dots';
-						}}
-					>
-						<span class={pattern === 'dots' ? '' : 'invisible'}>[</span>dots<span
-							class={pattern === 'dots' ? '' : 'invisible'}>]</span
+					{#each ['dots', 'lines', 'grid'] as p (p)}
+						<button
+							data-id={p}
+							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+							class:text-highlight={pattern === p}
+							class:text-foreground={pattern !== p}
+							onfocus={() => {
+								if (!isInitializing) pattern = p;
+							}}
 						>
-					</button>
-					<button
-						data-id="lines"
-						class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-						class:text-highlight={pattern === 'lines'}
-						class:text-foreground={pattern !== 'lines'}
-						onfocus={() => {
-							if (!isInitializing) pattern = 'lines';
-						}}
-					>
-						<span class={pattern === 'lines' ? '' : 'invisible'}>[</span>lines<span
-							class={pattern === 'lines' ? '' : 'invisible'}>]</span
-						>
-					</button>
-					<button
-						data-id="grid"
-						class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-						class:text-highlight={pattern === 'grid'}
-						class:text-foreground={pattern !== 'grid'}
-						onfocus={() => {
-							if (!isInitializing) pattern = 'grid';
-						}}
-					>
-						<span class={pattern === 'grid' ? '' : 'invisible'}>[</span>grid<span
-							class={pattern === 'grid' ? '' : 'invisible'}>]</span
-						>
-					</button>
+							<span class={pattern === p ? '' : 'invisible'}>[</span>{p}<span
+								class={pattern === p ? '' : 'invisible'}>]</span
+							>
+						</button>
+					{/each}
 				</div>
 			</div>
 
 			<div class="group mt-2 flex items-center gap-4 text-sm">
 				<span
-					class="hidden w-20 text-icons transition-colors group-focus-within:text-foreground sm:block"
+					class="hidden w-20 text-foreground/60 transition-colors group-focus-within:text-foreground sm:block"
 					>theme</span
 				>
 				<div class="keyboard-row flex gap-4">
-					<button
-						data-id="tokyonight"
-						class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-						class:text-highlight={theme === 'tokyonight'}
-						class:text-foreground={theme !== 'tokyonight'}
-						onfocus={() => {
-							if (!isInitializing) theme = 'tokyonight';
-						}}
-					>
-						<span class={theme === 'tokyonight' ? '' : 'invisible'}>[</span>tokyonight<span
-							class={theme === 'tokyonight' ? '' : 'invisible'}>]</span
+					{#each [{ id: 'tokyonight', label: 'tokyonight' }, { id: 'tokyonight-light', label: 'light' }] as t (t.id)}
+						<button
+							data-id={t.id}
+							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+							class:text-highlight={theme === t.id}
+							class:text-foreground={theme !== t.id}
+							onfocus={() => {
+								if (!isInitializing) theme = t.id;
+							}}
 						>
-					</button>
-					<button
-						data-id="tokyonight-light"
-						class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-						class:text-highlight={theme === 'tokyonight-light'}
-						class:text-foreground={theme !== 'tokyonight-light'}
-						onfocus={() => {
-							if (!isInitializing) theme = 'tokyonight-light';
-						}}
-					>
-						<span class={theme === 'tokyonight-light' ? '' : 'invisible'}>[</span>light<span
-							class={theme === 'tokyonight-light' ? '' : 'invisible'}>]</span
-						>
-					</button>
+							<span class={theme === t.id ? '' : 'invisible'}>[</span>{t.label}<span
+								class={theme === t.id ? '' : 'invisible'}>]</span
+							>
+						</button>
+					{/each}
 				</div>
 			</div>
 			<div class="group mt-6 flex justify-center text-sm">
 				<div class="grid grid-cols-4 gap-x-6 gap-y-3">
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-background"></div>
-						<span class="hidden text-xs text-icons sm:block">--bg</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-foreground"></div>
-						<span class="hidden text-xs text-icons sm:block">--fg</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-command"></div>
-						<span class="hidden text-xs text-icons sm:block">--command</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-heading"></div>
-						<span class="hidden text-xs text-icons sm:block">--heading</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-link"></div>
-						<span class="hidden text-xs text-icons sm:block">--link</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-icons"></div>
-						<span class="hidden text-xs text-icons sm:block">--icons</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-highlight"></div>
-						<span class="hidden text-xs text-icons sm:block">--highlight</span>
-					</div>
-					<div class="flex items-center gap-2">
-						<div class="size-3.5 rounded-xs border border-outlines/30 bg-outlines"></div>
-						<span class="hidden text-xs text-icons sm:block">--outlines</span>
-					</div>
+					{#each [{ bg: 'bg-background', label: '--bg' }, { bg: 'bg-foreground', label: '--fg' }, { bg: 'bg-command', label: '--command' }, { bg: 'bg-heading', label: '--heading' }, { bg: 'bg-link', label: '--link' }, { bg: 'bg-icons', label: '--icons' }, { bg: 'bg-highlight', label: '--highlight' }, { bg: 'bg-outlines', label: '--outlines' }] as color (color.bg)}
+						<div class="flex items-center gap-2">
+							<div class="size-3.5 rounded-xs border border-outlines/30 {color.bg}"></div>
+							<span class="hidden text-xs text-foreground/60 sm:block">{color.label}</span>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
@@ -289,7 +232,7 @@
 					<span
 						class="mr-1 hidden text-icons transition-colors group-hover:text-highlight group-focus:text-highlight sm:inline"
 						>[w]</span
-					>write
+					>save
 				</button>
 				<button
 					class="group no-focus-ring cursor-pointer text-foreground transition-colors outline-none hover:text-highlight focus:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
