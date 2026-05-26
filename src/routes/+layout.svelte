@@ -8,8 +8,7 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-	import CommandDialog from '$lib/components/CommandDialog.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, type Component } from 'svelte';
 	import { Sun, Moon, LayoutGrid } from '@lucide/svelte';
 	import { browser } from '$app/environment';
 
@@ -19,6 +18,7 @@
 
 	let currentTheme = $state('tokyonight');
 	let currentPattern = $state('dots');
+	let CommandDialogComponent: Component<any> | undefined = $state();
 
 	injectSpeedInsights();
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
@@ -28,9 +28,15 @@
 			modifierKey = 'Ctrl';
 		}
 
+		if (!data.isMobile) {
+			import('$lib/components/CommandDialog.svelte').then((m) => {
+				CommandDialogComponent = m.default;
+			});
+		}
+
 		const handleKeydown = (e: KeyboardEvent) => {
 			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-				if (window.innerWidth < 640) return;
+				if (data.isMobile) return;
 
 				const target = e.target as HTMLElement;
 				if (
@@ -75,20 +81,28 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<header
-	class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4 sm:hidden"
->
-	<button onclick={toggleTheme} aria-label="toggle theme" class="social-icon">
+{#if data.isMobile}
+<header class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4">
+	<button
+		onclick={toggleTheme}
+		aria-label="toggle theme"
+		class="social-icon"
+	>
 		{#if currentTheme === 'tokyonight'}
 			<Moon class="size-full" />
 		{:else}
 			<Sun class="size-full" />
 		{/if}
 	</button>
-	<button onclick={togglePattern} aria-label="toggle pattern" class="social-icon">
+	<button
+		onclick={togglePattern}
+		aria-label="toggle pattern"
+		class="social-icon"
+	>
 		<LayoutGrid class="size-full" />
 	</button>
 </header>
+{/if}
 
 <div
 	class="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 items-center justify-center p-4 px-6 text-foreground selection:bg-highlight selection:text-txt-highlight! lg:grid-cols-2 lg:justify-start xl:px-0 2xl:max-w-7xl"
@@ -102,15 +116,17 @@
 	class="fixed bottom-0 left-0 flex h-10 w-full items-center justify-center gap-4 px-4 text-xs sm:justify-between"
 >
 	<div class="flex justify-start gap-1">
+		{#if !data.isMobile}
 		<button
 			onclick={() => (isCommandDialogOpen = true)}
 			aria-label="open settings"
-			class="hidden cursor-pointer flex-row items-center justify-center border-none bg-background text-icons sm:flex"
+			class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-icons"
 		>
 			<kbd class="rounded-sm border border-current px-1 font-roboto text-sm font-bold shadow-sm"
 				>{modifierKey} K</kbd
 			>
 		</button>
+		{/if}
 	</div>
 	<div class="flex justify-end gap-1">
 		<a
@@ -134,4 +150,6 @@
 	</div>
 </footer>
 
-<CommandDialog bind:isOpen={isCommandDialogOpen} />
+{#if CommandDialogComponent}
+	<CommandDialogComponent bind:isOpen={isCommandDialogOpen} />
+{/if}
