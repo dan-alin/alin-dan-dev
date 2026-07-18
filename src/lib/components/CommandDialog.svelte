@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { settings, type Pattern, type Theme } from '$lib/settings.svelte';
+	import { gridNav } from '$lib/actions/gridNav';
 	let { isOpen = $bindable(false) } = $props();
 	let dialog: HTMLDialogElement;
 
@@ -17,86 +18,26 @@
 		}
 	});
 
-	function handleKeydown(e: KeyboardEvent) {
+	function handleQuit(e: KeyboardEvent) {
 		if (!isOpen) return;
-
 		const active = document.activeElement as HTMLElement;
 		const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
-
-		// Allow normal typing if focused on an input
-		if (isInput && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-			return;
-		}
-
+		if (isInput && e.key.length === 1 && !e.ctrlKey && !e.metaKey) return;
 		if (!e.metaKey && !e.ctrlKey && (e.key === 'Escape' || e.key.toLowerCase() === 'q')) {
 			e.preventDefault();
 			handleClose();
-			return;
-		}
-
-		const lowerKey = e.key.toLowerCase();
-		const code = e.code || '';
-
-		let isArrowRight =
-			e.key === 'ArrowRight' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'l' || code === 'KeyL'));
-		let isArrowLeft =
-			e.key === 'ArrowLeft' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'h' || code === 'KeyH'));
-		let isArrowDown =
-			e.key === 'ArrowDown' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'j' || code === 'KeyJ'));
-		let isArrowUp =
-			e.key === 'ArrowUp' || (!e.metaKey && !e.ctrlKey && (lowerKey === 'k' || code === 'KeyK'));
-
-		let isNav = isArrowRight || isArrowLeft || isArrowDown || isArrowUp;
-
-		if (isNav) {
-			if (isInput) {
-				if (isArrowLeft || isArrowRight) return;
-			}
-
-			// Group buttons by their container rows
-			const rows = Array.from(dialog.querySelectorAll<HTMLElement>('.keyboard-row'))
-				.map((row) => Array.from(row.querySelectorAll<HTMLElement>('button')))
-				.filter((buttons) => buttons.length > 0);
-
-			if (rows.length === 0) return;
-
-			e.preventDefault();
-
-			let r = rows.findIndex((row) => row.includes(active));
-			if (r === -1) {
-				// If nothing is focused, focus the first element
-				rows[0][0].focus();
-				return;
-			}
-
-			let c = rows[r].indexOf(active);
-
-			if (isArrowRight) {
-				rows[r][(c + 1) % rows[r].length].focus();
-			} else if (isArrowLeft) {
-				rows[r][(c - 1 + rows[r].length) % rows[r].length].focus();
-			} else if (isArrowDown) {
-				let nextRow = (r + 1) % rows.length;
-				let target =
-					rows[nextRow].find((btn) => btn.classList.contains('text-highlight')) || rows[nextRow][0];
-				target.focus();
-			} else if (isArrowUp) {
-				let prevRow = (r - 1 + rows.length) % rows.length;
-				let target =
-					rows[prevRow].find((btn) => btn.classList.contains('text-highlight')) || rows[prevRow][0];
-				target.focus();
-			}
 		}
 	}
 </script>
 
 <dialog
 	bind:this={dialog}
+	use:gridNav
 	onclose={handleClose}
 	onclick={(e) => {
 		if (e.target === dialog) handleClose();
 	}}
-	onkeydown={handleKeydown}
+	onkeydown={handleQuit}
 	class="fixed top-1/2 left-1/2 m-0 h-100 w-150 max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-outlines bg-background p-6 font-roboto text-foreground shadow-none ring-0 transition-all duration-300 outline-none backdrop:bg-transparent focus:outline-none"
 >
 	<div class="flex h-full flex-col gap-4">
