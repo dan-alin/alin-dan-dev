@@ -13,9 +13,7 @@
 		build: `${__APP_VERSION__}`
 	};
 	onMount(() => {
-		const isMobile = window.matchMedia('(pointer: coarse)').matches;
-
-		if (!isMobile) {
+		if (!data.isMobile) {
 			const mousePosHandle = mousePos(document.body, { useBody: true, useCSSVars: true });
 			return () => mousePosHandle.destroy();
 		}
