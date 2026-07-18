@@ -1,70 +1,17 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { settings, type Pattern, type Theme } from '$lib/settings.svelte';
 	let { isOpen = $bindable(false) } = $props();
 	let dialog: HTMLDialogElement;
 
-	let originalTheme = browser ? localStorage.getItem('theme') || 'tokyonight' : 'tokyonight';
-	let originalPattern = browser ? localStorage.getItem('pattern') || 'dots' : 'dots';
-	let theme = $state(originalTheme);
-	let pattern = $state(originalPattern);
-	let saved = false;
-	let isInitializing = false;
-
-	$effect(() => {
-		if (browser) {
-			document.documentElement.setAttribute('data-theme', theme);
-		}
-	});
-
-	$effect(() => {
-		if (browser) {
-			document.documentElement.setAttribute('data-pattern', pattern);
-		}
-	});
-
-	function saveAndClose() {
-		saved = true;
-		if (browser) {
-			localStorage.setItem('theme', theme);
-			localStorage.setItem('pattern', pattern);
-		}
-		isOpen = false;
-	}
-
 	function handleClose() {
-		if (!saved) {
-			theme = originalTheme;
-			pattern = originalPattern;
-			if (browser) {
-				document.documentElement.setAttribute('data-theme', originalTheme);
-				document.documentElement.setAttribute('data-pattern', originalPattern);
-			}
-		}
 		isOpen = false;
 	}
 
 	$effect(() => {
 		if (isOpen) {
-			isInitializing = true;
-			saved = false;
-			if (browser) {
-				originalTheme = localStorage.getItem('theme') || 'tokyonight';
-				originalPattern = localStorage.getItem('pattern') || 'dots';
-				theme = originalTheme;
-				pattern = originalPattern;
-			}
+			dialog?.querySelectorAll<HTMLElement>('[data-id]').forEach((b) => b.removeAttribute('autofocus'));
+			dialog?.querySelector<HTMLElement>(`[data-id="${settings.pattern}"]`)?.setAttribute('autofocus', '');
 			dialog?.showModal();
-			// Focus the currently active pattern button when opened (since it's the top row)
-			setTimeout(() => {
-				const activeBtn =
-					(dialog?.querySelector(`button[data-id="${originalPattern}"]`) as HTMLElement) ||
-					(dialog?.querySelector('button') as HTMLElement);
-				activeBtn?.focus();
-
-				setTimeout(() => {
-					isInitializing = false;
-				}, 10);
-			}, 10);
 		} else {
 			dialog?.close();
 		}
@@ -78,12 +25,6 @@
 
 		// Allow normal typing if focused on an input
 		if (isInput && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-			return;
-		}
-
-		if (!e.metaKey && !e.ctrlKey && e.key.toLowerCase() === 'w') {
-			e.preventDefault();
-			saveAndClose();
 			return;
 		}
 
@@ -174,14 +115,14 @@
 						<button
 							data-id={p}
 							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-							class:text-highlight={pattern === p}
-							class:text-foreground={pattern !== p}
+							class:text-highlight={settings.pattern === p}
+							class:text-foreground={settings.pattern !== p}
 							onfocus={() => {
-								if (!isInitializing) pattern = p;
+								settings.pattern = p as Pattern;
 							}}
 						>
-							<span class={pattern === p ? '' : 'invisible'}>[</span>{p}<span
-								class={pattern === p ? '' : 'invisible'}>]</span
+							<span class={settings.pattern === p ? '' : 'invisible'}>[</span>{p}<span
+								class={settings.pattern === p ? '' : 'invisible'}>]</span
 							>
 						</button>
 					{/each}
@@ -198,14 +139,14 @@
 						<button
 							data-id={t.id}
 							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-							class:text-highlight={theme === t.id}
-							class:text-foreground={theme !== t.id}
+							class:text-highlight={settings.theme === t.id}
+							class:text-foreground={settings.theme !== t.id}
 							onfocus={() => {
-								if (!isInitializing) theme = t.id;
+								settings.theme = t.id as Theme;
 							}}
 						>
-							<span class={theme === t.id ? '' : 'invisible'}>[</span>{t.label}<span
-								class={theme === t.id ? '' : 'invisible'}>]</span
+							<span class={settings.theme === t.id ? '' : 'invisible'}>[</span>{t.label}<span
+								class={settings.theme === t.id ? '' : 'invisible'}>]</span
 							>
 						</button>
 					{/each}
@@ -225,15 +166,6 @@
 
 		<div class="mt-auto flex justify-center pb-2 text-sm text-icons">
 			<div class="keyboard-row flex gap-8">
-				<button
-					class="group no-focus-ring cursor-pointer text-foreground transition-colors outline-none hover:text-highlight focus:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-					onclick={saveAndClose}
-				>
-					<span
-						class="mr-1 hidden text-icons transition-colors group-hover:text-highlight group-focus:text-highlight sm:inline"
-						>[w]</span
-					>save
-				</button>
 				<button
 					class="group no-focus-ring cursor-pointer text-foreground transition-colors outline-none hover:text-highlight focus:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
 					onclick={handleClose}

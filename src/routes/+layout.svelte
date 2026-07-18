@@ -10,14 +10,12 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { onMount, type Component } from 'svelte';
 	import { Sun, Moon, LayoutGrid } from '@lucide/svelte';
-	import { browser } from '$app/environment';
+	import { settings } from '$lib/settings.svelte';
 
 	let { children, data } = $props();
 	let isCommandDialogOpen = $state(false);
 	let modifierKey = $state('⌘');
 
-	let currentTheme = $state('tokyonight');
-	let currentPattern = $state('dots');
 	let CommandDialogComponent: Component<any> | undefined = $state();
 
 	injectSpeedInsights();
@@ -52,45 +50,22 @@
 
 		window.addEventListener('keydown', handleKeydown);
 
-		if (browser) {
-			currentTheme = localStorage.getItem('theme') || 'tokyonight';
-			currentPattern = localStorage.getItem('pattern') || 'dots';
-		}
-
 		return () => window.removeEventListener('keydown', handleKeydown);
 	});
-
-	function toggleTheme() {
-		currentTheme = currentTheme === 'tokyonight' ? 'tokyonight-light' : 'tokyonight';
-		if (browser) {
-			localStorage.setItem('theme', currentTheme);
-			document.documentElement.setAttribute('data-theme', currentTheme);
-		}
-	}
-
-	function togglePattern() {
-		const patterns = ['dots', 'lines', 'grid'];
-		const nextIndex = (patterns.indexOf(currentPattern) + 1) % patterns.length;
-		currentPattern = patterns[nextIndex];
-		if (browser) {
-			localStorage.setItem('pattern', currentPattern);
-			document.documentElement.setAttribute('data-pattern', currentPattern);
-		}
-	}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 {#if data.isMobile}
 	<header class="fixed top-0 left-0 z-50 flex h-14 w-full items-center justify-start gap-2 px-4">
-		<button onclick={toggleTheme} aria-label="toggle theme" class="social-icon">
-			{#if currentTheme === 'tokyonight'}
+		<button onclick={() => settings.toggleTheme()} aria-label="toggle theme" class="social-icon">
+			{#if settings.theme === 'tokyonight'}
 				<Moon class="size-full" />
 			{:else}
 				<Sun class="size-full" />
 			{/if}
 		</button>
-		<button onclick={togglePattern} aria-label="toggle pattern" class="social-icon">
+		<button onclick={() => settings.nextPattern()} aria-label="toggle pattern" class="social-icon">
 			<LayoutGrid class="size-full" />
 		</button>
 	</header>
