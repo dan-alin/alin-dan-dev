@@ -74,5 +74,5 @@
 </footer>
 
 {#if !data.isMobile}
-	<CommandDialog bind:isOpen={isCommandDialogOpen} />
+	<CommandDialog bind:isOpen={isCommandDialogOpen} {settings} />
 {/if}

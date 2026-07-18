@@ -1,8 +1,18 @@
 <script lang="ts">
-	import { settings, type Pattern, type Theme } from '$lib/settings.svelte';
+	import { PATTERNS, THEMES, type Pattern, type Theme } from '$lib/settings.svelte';
 	import { gridNav } from '$lib/actions/gridNav';
-	let { isOpen = $bindable(false) } = $props();
+
+	interface Settings {
+		pattern: Pattern;
+		theme: Theme;
+	}
+
+	let { isOpen = $bindable(false), settings }: { isOpen?: boolean; settings: Settings } = $props();
 	let dialog: HTMLDialogElement;
+
+	// Theme label is the variant suffix (e.g. 'tokyonight-light' -> 'light'),
+	// or the full id when there is no variant. Keeps the dialog data-driven from THEMES.
+	const themeLabel = (t: Theme) => t.split('-').slice(1).join('-') || t;
 
 	function handleClose() {
 		isOpen = false;
@@ -10,8 +20,12 @@
 
 	$effect(() => {
 		if (isOpen) {
-			dialog?.querySelectorAll<HTMLElement>('[data-id]').forEach((b) => b.removeAttribute('autofocus'));
-			dialog?.querySelector<HTMLElement>(`[data-id="${settings.pattern}"]`)?.setAttribute('autofocus', '');
+			dialog
+				?.querySelectorAll<HTMLElement>('[data-id]')
+				.forEach((b) => b.removeAttribute('autofocus'));
+			dialog
+				?.querySelector<HTMLElement>(`[data-id="${settings.pattern}"]`)
+				?.setAttribute('autofocus', '');
 			dialog?.showModal();
 		} else {
 			dialog?.close();
@@ -52,14 +66,14 @@
 					>pattern</span
 				>
 				<div class="keyboard-row flex gap-4">
-					{#each ['dots', 'lines', 'grid'] as p (p)}
+					{#each PATTERNS as p (p)}
 						<button
 							data-id={p}
 							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
 							class:text-highlight={settings.pattern === p}
 							class:text-foreground={settings.pattern !== p}
 							onfocus={() => {
-								settings.pattern = p as Pattern;
+								settings.pattern = p;
 							}}
 						>
 							<span class={settings.pattern === p ? '' : 'invisible'}>[</span>{p}<span
@@ -76,18 +90,18 @@
 					>theme</span
 				>
 				<div class="keyboard-row flex gap-4">
-					{#each [{ id: 'tokyonight', label: 'tokyonight' }, { id: 'tokyonight-light', label: 'light' }] as t (t.id)}
+					{#each THEMES as t (t)}
 						<button
-							data-id={t.id}
+							data-id={t}
 							class="no-focus-ring cursor-pointer transition-colors outline-none hover:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-							class:text-highlight={settings.theme === t.id}
-							class:text-foreground={settings.theme !== t.id}
+							class:text-highlight={settings.theme === t}
+							class:text-foreground={settings.theme !== t}
 							onfocus={() => {
-								settings.theme = t.id as Theme;
+								settings.theme = t;
 							}}
 						>
-							<span class={settings.theme === t.id ? '' : 'invisible'}>[</span>{t.label}<span
-								class={settings.theme === t.id ? '' : 'invisible'}>]</span
+							<span class={settings.theme === t ? '' : 'invisible'}>[</span>{themeLabel(t)}<span
+								class={settings.theme === t ? '' : 'invisible'}>]</span
 							>
 						</button>
 					{/each}
