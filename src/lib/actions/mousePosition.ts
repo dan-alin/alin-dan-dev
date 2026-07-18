@@ -1,23 +1,10 @@
-import { writable, type Writable } from 'svelte/store';
-
-export type MousePosition = {
-	x: Writable<number>;
-	y: Writable<number>;
-};
-
 export type MousePositionOptions = {
 	useBody?: boolean; // track mouse on body instead of element
 	useCSSVars?: boolean; // update --mx / --my automatically
 };
 
-/**
- * Svelte action: use:mousePos
- * Tracks mouse position on the element (or body) and optionally updates CSS vars.
- */
-export function mousePos(node: HTMLElement, options: MousePositionOptions = {}): MousePosition {
-	const x = writable(0);
-	const y = writable(0);
-
+/** Svelte action: use:mousePos — tracks mouse position on the element (or body) and optionally updates CSS vars. */
+export function mousePos(node: HTMLElement, options: MousePositionOptions = {}): { destroy(): void } {
 	const target = options.useBody ? document.body : node;
 	let ticking = false;
 
@@ -32,9 +19,6 @@ export function mousePos(node: HTMLElement, options: MousePositionOptions = {}):
 				const clampedX = Math.max(0, Math.min(posX, 100));
 				const clampedY = Math.max(0, Math.min(posY, 100));
 
-				x.set(clampedX);
-				y.set(clampedY);
-
 				if (options.useCSSVars) {
 					target.style.setProperty('--mx', `${clampedX}%`);
 					target.style.setProperty('--my', `${clampedY}%`);
@@ -48,7 +32,8 @@ export function mousePos(node: HTMLElement, options: MousePositionOptions = {}):
 	target.addEventListener('mousemove', handleMouse);
 
 	return {
-		x,
-		y
+		destroy() {
+			target.removeEventListener('mousemove', handleMouse);
+		}
 	};
 }

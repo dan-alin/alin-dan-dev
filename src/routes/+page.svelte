@@ -16,7 +16,8 @@
 		const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
 		if (!isMobile) {
-			mousePos(document.body, { useBody: true, useCSSVars: true });
+			const mousePosHandle = mousePos(document.body, { useBody: true, useCSSVars: true });
+			return () => mousePosHandle.destroy();
 		}
 	});
 </script>
