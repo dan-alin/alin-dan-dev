@@ -46,7 +46,7 @@
 
 <dialog
 	bind:this={dialog}
-	use:gridNav
+	use:gridNav={{ rowSelector: '.keyboard-row', itemSelector: 'button', activeSelector: '.text-highlight' }}
 	onclose={handleClose}
 	onclick={(e) => {
 		if (e.target === dialog) handleClose();

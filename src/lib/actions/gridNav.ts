@@ -1,5 +1,20 @@
+export interface GridNavOptions {
+	rowSelector?: string;
+	itemSelector?: string;
+	activeSelector?: string;
+}
+
 /** Svelte action: use:gridNav — HJKL/arrow key grid navigation over `.keyboard-row` button groups. */
-export function gridNav(node: HTMLElement): { destroy(): void } {
+export function gridNav(
+	node: HTMLElement,
+	options: GridNavOptions = {}
+): { destroy(): void } {
+	const {
+		rowSelector = '.keyboard-row',
+		itemSelector = 'button',
+		activeSelector = '.text-highlight'
+	} = options;
+
 	function handleKeydown(e: KeyboardEvent) {
 		const active = document.activeElement as HTMLElement;
 		const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
@@ -22,9 +37,9 @@ export function gridNav(node: HTMLElement): { destroy(): void } {
 
 		if (isInput && (isArrowLeft || isArrowRight)) return;
 
-		const rows = Array.from(node.querySelectorAll<HTMLElement>('.keyboard-row'))
-			.map((row) => Array.from(row.querySelectorAll<HTMLElement>('button')))
-			.filter((buttons) => buttons.length > 0);
+		const rows = Array.from(node.querySelectorAll<HTMLElement>(rowSelector))
+			.map((row) => Array.from(row.querySelectorAll<HTMLElement>(itemSelector)))
+			.filter((items) => items.length > 0);
 
 		if (rows.length === 0) return;
 
@@ -45,12 +60,12 @@ export function gridNav(node: HTMLElement): { destroy(): void } {
 		} else if (isArrowDown) {
 			const nextRow = (rowIdx + 1) % rows.length;
 			const target =
-				rows[nextRow].find((btn) => btn.classList.contains('text-highlight')) ?? rows[nextRow][0];
+				rows[nextRow].find((btn) => btn.matches(activeSelector)) ?? rows[nextRow][0];
 			target.focus();
 		} else if (isArrowUp) {
 			const prevRow = (rowIdx - 1 + rows.length) % rows.length;
 			const target =
-				rows[prevRow].find((btn) => btn.classList.contains('text-highlight')) ?? rows[prevRow][0];
+				rows[prevRow].find((btn) => btn.matches(activeSelector)) ?? rows[prevRow][0];
 			target.focus();
 		}
 	}
