@@ -10,9 +10,10 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import CommandDialog from '$lib/components/CommandDialog.svelte';
 	import MobileControls from '$lib/components/MobileControls.svelte';
-	import { commandTrigger } from '$lib/actions/commandTrigger';
+	import { registerCommandShortcut } from '$lib/actions/commandTrigger';
 	import { platformModifierKey } from '$lib/platform';
 	import { settings } from '$lib/settings.svelte';
+	import { onMount } from 'svelte';
 
 	let { children, data } = $props();
 	let isCommandDialogOpen = $state(false);
@@ -20,6 +21,13 @@
 
 	injectSpeedInsights();
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
+
+	onMount(() => {
+		if (!data.isMobile) {
+			const shortcut = registerCommandShortcut(() => (isCommandDialogOpen = true));
+			return () => shortcut.destroy();
+		}
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -30,7 +38,6 @@
 
 <div
 	class="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 items-center justify-center p-4 px-6 text-foreground selection:bg-highlight selection:text-txt-highlight! lg:grid-cols-2 lg:justify-start xl:px-0 2xl:max-w-7xl"
-	use:commandTrigger={{ onOpen: () => (isCommandDialogOpen = true), disabled: data.isMobile }}
 >
 	<main class="flex flex-col justify-center px-6">
 		{@render children()}
