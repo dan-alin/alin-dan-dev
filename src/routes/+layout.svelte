@@ -8,15 +8,15 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-	import CommandDialog from '$lib/components/CommandDialog.svelte';
-	import MobileControls from '$lib/components/MobileControls.svelte';
-	import { registerCommandShortcut } from '$lib/actions/commandTrigger';
+	import SettingsDialog from '$lib/components/SettingsDialog.svelte';
+	import MobileSettingsBar from '$lib/components/MobileSettingsBar.svelte';
+	import { registerSettingsShortcut } from '$lib/actions/settingsTrigger';
 	import { platformModifierKey } from '$lib/platform';
 	import { settings } from '$lib/settings.svelte';
 	import { onMount } from 'svelte';
 
 	let { children, data } = $props();
-	let isCommandDialogOpen = $state(false);
+	let isSettingsDialogOpen = $state(false);
 	const modifierKey = platformModifierKey();
 
 	injectSpeedInsights();
@@ -24,7 +24,7 @@
 
 	onMount(() => {
 		if (!data.isMobile) {
-			const shortcut = registerCommandShortcut(() => (isCommandDialogOpen = true));
+			const shortcut = registerSettingsShortcut(() => (isSettingsDialogOpen = true));
 			return () => shortcut.destroy();
 		}
 	});
@@ -33,7 +33,7 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 {#if data.isMobile}
-	<MobileControls {settings} />
+	<MobileSettingsBar {settings} />
 {/if}
 
 <div
@@ -50,7 +50,7 @@
 	<div class="flex justify-start gap-1">
 		{#if !data.isMobile}
 			<button
-				onclick={() => (isCommandDialogOpen = true)}
+				onclick={() => (isSettingsDialogOpen = true)}
 				aria-label="open settings"
 				class="flex cursor-pointer flex-row items-center justify-center border-none bg-background text-command/80"
 			>
@@ -60,7 +60,7 @@
 	</div>
 	<div class="flex justify-end gap-1">
 		<a
-			href={data.githubUrl}
+			href={data.socialLinks.github}
 			target="_blank"
 			rel="external"
 			aria-label="github profile"
@@ -69,7 +69,7 @@
 			<Github class="size-full" />
 		</a>
 		<a
-			href={data.linkedinUrl}
+			href={data.socialLinks.linkedin}
 			target="_blank"
 			rel="external"
 			aria-label="linkedin profile"
@@ -81,5 +81,5 @@
 </footer>
 
 {#if !data.isMobile}
-	<CommandDialog isOpen={isCommandDialogOpen} onClose={() => (isCommandDialogOpen = false)} {settings} />
+	<SettingsDialog isOpen={isSettingsDialogOpen} onClose={() => (isSettingsDialogOpen = false)} {settings} />
 {/if}

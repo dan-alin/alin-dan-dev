@@ -4,7 +4,7 @@
  * called inside `onMount` — not a Svelte action. Callers decide whether to register at
  * all (e.g. desktop only), so there is no `disabled` flag.
  */
-export function registerCommandShortcut(onOpen: () => void): { destroy(): void } {
+export function registerSettingsShortcut(onOpen: () => void): { destroy(): void } {
 	let lastFired = 0;
 
 	const handleKeydown = (e: KeyboardEvent) => {

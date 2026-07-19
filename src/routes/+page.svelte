@@ -5,12 +5,12 @@
 	import { MapPinned, Tag, SquareTerminal } from '@lucide/svelte/icons';
 	import { onMount } from 'svelte';
 	let { data } = $props();
+	const sectionLabel = 'whoami';
+	const version = `${__APP_VERSION__}`;
 	let profile = {
-		section: 'whoami',
 		name: 'Alin Dan',
 		role: 'Software Engineer',
-		location: 'Rome, Italy',
-		build: `${__APP_VERSION__}`
+		location: 'Rome, Italy'
 	};
 	onMount(() => {
 		if (!data.isMobile) {
@@ -29,7 +29,7 @@
 	<p
 		class="absolute bottom-0 -left-1 origin-bottom-left -rotate-90 font-roboto text-sm text-command select-none"
 		use:type={{
-			text: profile.section,
+			text: sectionLabel,
 			getDelay: () => {
 				return Math.random() * 100 + 50;
 			}
@@ -59,11 +59,11 @@
 					<Tag class="size-4 text-icons" />
 					<a
 						aria-label="version"
-						href={`${data.githubUrl}/alin-dan-dev/releases/tag/v${profile.build}`}
+						href={`${data.socialLinks.github}/alin-dan-dev/releases/tag/v${version}`}
 						target="_blank"
 						rel="external"
 						class=" text-link"
-						use:scramble={{ text: `${profile.build}`, delay: 500, startChar: '•' }}
+						use:scramble={{ text: version, delay: 500, startChar: '•' }}
 					>
 					</a>
 				</li>

@@ -5,8 +5,10 @@ export const load: LayoutServerLoad = ({ request }) => {
 	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
 
 	return {
-		githubUrl: 'https://github.com/dan-alin',
-		linkedinUrl: 'https://www.linkedin.com/in/alin-dan-24aa67211',
+		socialLinks: {
+			github: 'https://github.com/dan-alin',
+			linkedin: 'https://www.linkedin.com/in/alin-dan-24aa67211'
+		},
 		isMobile
 	};
 };
