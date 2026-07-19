@@ -10,10 +10,6 @@
 	let { isOpen = $bindable(false), settings }: { isOpen?: boolean; settings: Settings } = $props();
 	let dialog: HTMLDialogElement;
 
-	// Theme label is the variant suffix (e.g. 'tokyonight-light' -> 'light'),
-	// or the full id when there is no variant. Keeps the dialog data-driven from THEMES.
-	const themeLabel = (t: Theme) => t.split('-').slice(1).join('-') || t;
-
 	function handleClose() {
 		isOpen = false;
 	}
@@ -100,7 +96,7 @@
 								settings.theme = t;
 							}}
 						>
-							<span class={settings.theme === t ? '' : 'invisible'}>[</span>{themeLabel(t)}<span
+							<span class={settings.theme === t ? '' : 'invisible'}>[</span>{t}<span
 								class={settings.theme === t ? '' : 'invisible'}>]</span
 							>
 						</button>

@@ -40,7 +40,7 @@ html,
 	--color-outlines: var(--tnd-cyan);
 }
 
-html[data-theme='tokyonight'] {
+html[data-theme='dark'] {
 	--bg: var(--tnd-black);
 	--fg: var(--tnd-white);
 	--color-section: var(--tnd-purple);
@@ -53,7 +53,7 @@ html[data-theme='tokyonight'] {
 	--color-outlines: var(--tnd-cyan);
 }
 
-html[data-theme='tokyonight-light'] {
+html[data-theme='light'] {
 	--bg: var(--tnl-white);
 	--fg: var(--tnl-black);
 	--color-section: var(--tnl-red);

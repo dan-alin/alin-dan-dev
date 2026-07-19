@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 
-const THEMES = ['tokyonight', 'tokyonight-light'] as const;
+const THEMES = ['dark', 'light'] as const;
 const PATTERNS = ['dots', 'lines', 'grid'] as const;
 
 export type Theme = (typeof THEMES)[number];
@@ -10,8 +10,8 @@ export { THEMES, PATTERNS };
 
 function createSettings() {
 	const initTheme = browser
-		? ((localStorage.getItem('theme') as Theme) ?? 'tokyonight')
-		: 'tokyonight';
+		? ((localStorage.getItem('theme') as Theme) ?? 'dark')
+		: 'dark';
 	const initPattern = browser
 		? ((localStorage.getItem('pattern') as Pattern) ?? 'dots')
 		: 'dots';
@@ -47,12 +47,15 @@ function createSettings() {
 				document.documentElement.setAttribute('data-pattern', v);
 			}
 		},
+		get isDark() {
+			return theme === 'dark';
+		},
 		nextPattern() {
 			const i = PATTERNS.indexOf(pattern);
 			this.pattern = PATTERNS[(i + 1) % PATTERNS.length];
 		},
 		toggleTheme() {
-			this.theme = theme === 'tokyonight' ? 'tokyonight-light' : 'tokyonight';
+			this.theme = theme === 'dark' ? 'light' : 'dark';
 		}
 	};
 }
