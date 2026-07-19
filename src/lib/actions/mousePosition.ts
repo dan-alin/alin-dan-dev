@@ -1,11 +1,4 @@
-export type MousePositionOptions = {
-	useBody?: boolean; // track mouse on body instead of element
-	useCSSVars?: boolean; // update --mx / --my automatically
-};
-
-/** Svelte action: use:mousePos — tracks mouse position on the element (or body) and optionally updates CSS vars. */
-export function mousePos(node: HTMLElement, options: MousePositionOptions = {}): { destroy(): void } {
-	const target = options.useBody ? document.body : node;
+function attachMouseTracker(target: HTMLElement): { destroy(): void } {
 	let ticking = false;
 
 	const handleMouse = (e: MouseEvent) => {
@@ -19,10 +12,8 @@ export function mousePos(node: HTMLElement, options: MousePositionOptions = {}):
 				const clampedX = Math.max(0, Math.min(posX, 100));
 				const clampedY = Math.max(0, Math.min(posY, 100));
 
-				if (options.useCSSVars) {
-					target.style.setProperty('--mx', `${clampedX}%`);
-					target.style.setProperty('--my', `${clampedY}%`);
-				}
+				target.style.setProperty('--mx', `${clampedX}%`);
+				target.style.setProperty('--my', `${clampedY}%`);
 
 				ticking = false;
 			});
@@ -36,4 +27,13 @@ export function mousePos(node: HTMLElement, options: MousePositionOptions = {}):
 			target.removeEventListener('mousemove', handleMouse);
 		}
 	};
+}
+
+export function trackBodyMouse(): { destroy(): void } {
+	return attachMouseTracker(document.body);
+}
+
+/** Svelte action: use:mousePos — tracks mouse position on the element and unconditionally updates CSS vars. */
+export function mousePos(node: HTMLElement): { destroy(): void } {
+	return attachMouseTracker(node);
 }

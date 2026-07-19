@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { scramble } from '$lib/actions/scramble';
 	import { type } from '$lib/actions/type';
-	import { mousePos } from '$lib/actions/mousePosition';
+	import { trackBodyMouse } from '$lib/actions/mousePosition';
 	import { MapPinned, Tag, SquareTerminal } from '@lucide/svelte/icons';
 	import { onMount } from 'svelte';
 	let { data } = $props();
@@ -14,7 +14,7 @@
 	};
 	onMount(() => {
 		if (!data.isMobile) {
-			const mousePosHandle = mousePos(document.body, { useBody: true, useCSSVars: true });
+			const mousePosHandle = trackBodyMouse();
 			return () => mousePosHandle.destroy();
 		}
 	});
