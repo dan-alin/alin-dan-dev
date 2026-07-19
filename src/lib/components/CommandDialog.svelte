@@ -7,21 +7,21 @@
 		theme: Theme;
 	}
 
-	let { isOpen = $bindable(false), settings }: { isOpen?: boolean; settings: Settings } = $props();
+	let { isOpen = false, onClose, settings }: { isOpen?: boolean; onClose: () => void; settings: Settings } = $props();
 	let dialog: HTMLDialogElement;
 
-	function handleClose() {
-		isOpen = false;
-	}
+	$effect(() => {
+		if (!isOpen) return;
+		dialog
+			?.querySelectorAll<HTMLElement>('[data-id]')
+			.forEach((b) => b.removeAttribute('autofocus'));
+		dialog
+			?.querySelector<HTMLElement>(`[data-id="${settings.pattern}"]`)
+			?.setAttribute('autofocus', '');
+	});
 
 	$effect(() => {
 		if (isOpen) {
-			dialog
-				?.querySelectorAll<HTMLElement>('[data-id]')
-				.forEach((b) => b.removeAttribute('autofocus'));
-			dialog
-				?.querySelector<HTMLElement>(`[data-id="${settings.pattern}"]`)
-				?.setAttribute('autofocus', '');
 			dialog?.showModal();
 		} else {
 			dialog?.close();
@@ -35,7 +35,7 @@
 		if (isInput && e.key.length === 1 && !e.ctrlKey && !e.metaKey) return;
 		if (!e.metaKey && !e.ctrlKey && (e.key === 'Escape' || e.key.toLowerCase() === 'q')) {
 			e.preventDefault();
-			handleClose();
+			dialog?.close();
 		}
 	}
 </script>
@@ -43,9 +43,9 @@
 <dialog
 	bind:this={dialog}
 	use:gridNav={{ rowSelector: '.keyboard-row', itemSelector: 'button', activeSelector: '.text-highlight' }}
-	onclose={handleClose}
+	onclose={onClose}
 	onclick={(e) => {
-		if (e.target === dialog) handleClose();
+		if (e.target === dialog) dialog.close();
 	}}
 	onkeydown={handleQuit}
 	class="fixed top-1/2 left-1/2 m-0 h-100 w-150 max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-sm border border-outlines bg-background p-6 font-roboto text-foreground shadow-none ring-0 transition-all duration-300 outline-none backdrop:bg-transparent focus:outline-none"
@@ -119,7 +119,7 @@
 			<div class="keyboard-row flex gap-8">
 				<button
 					class="group no-focus-ring cursor-pointer text-foreground transition-colors outline-none hover:text-highlight focus:text-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
-					onclick={handleClose}
+					onclick={() => dialog?.close()}
 				>
 					<span
 						class="mr-1 hidden text-icons transition-colors group-hover:text-highlight group-focus:text-highlight sm:inline"

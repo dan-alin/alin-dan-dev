@@ -74,5 +74,5 @@
 </footer>
 
 {#if !data.isMobile}
-	<CommandDialog bind:isOpen={isCommandDialogOpen} {settings} />
+	<CommandDialog isOpen={isCommandDialogOpen} onClose={() => (isCommandDialogOpen = false)} {settings} />
 {/if}
